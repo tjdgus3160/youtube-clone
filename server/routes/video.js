@@ -1,9 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const { Video } = require("../models/Video");
+// const { Video } = require("../models/Video");
 
 const { auth } = require("../middleware/auth");
 const multer = require('multer');
+var ffmpeg = require("fluent-ffmpeg");
 
 //=================================
 //             Video
@@ -36,6 +37,34 @@ router.post('/uploadfiles', (req, res) => {
     })
 })
 
+router.post('/thumbnail', (req, res) => {
 
+    let filePath = "";
+    let fileDuration = "";
+
+    // 비디오 정보 가져오기
+    ffmpeg.ffprobe(req.body.url, function(err, metadata){
+        fileDuration = metadata.format.duration; // 비디오 러닝타임
+    })
+
+    // 썸네일 생성, 
+    ffmpeg(req.body.url)    // 비디오 저장 경로
+    .on('filenames', function(filenames){ // 썸네일 파일 이름 생성
+        filePath = 'uploads/thumbnails/'+filenames[0];
+    })
+    .on('end', function(){ // 썸네일 생성 성공
+        return res.json({success: true, url: filePath, fileDuration: fileDuration});
+    })
+    .on('error', function (err){
+        return res.json({success: false, err});
+    })
+    .screenshots({  // 옵션
+        count: 3,   // 썸네일 개수
+        folder: 'uploads/thumbnails',   // 저장 위치
+        size: '320x240',    // 썸네일 크기
+        // %b : 확장자를 제외한 파일 원래 이름
+        filename: 'thumbnail-%b.png'
+    })
+})
 
 module.exports = router;
