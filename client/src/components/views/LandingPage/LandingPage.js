@@ -29,14 +29,23 @@ function LandingPage() {
 
         return(
             <Col lg={6} md={8} xs={24}>
-                <a href={`/video/post/${video._id}`}>
-                    <div style={{position: 'relative'}}>
-                        <img style={{width: '100%'}} src={`http://localhost:5000/${video.thumbnail}`} alt='thumbnail' />
-                        <div className='duration'>
-                            <span>{minutes} : {seconds}</span>
+                <div style={{position: 'relative'}}>
+                    <a href={`/video/${video._id}`}>
+                        <div style={{position: 'relative'}}>
+                            <img style={{width: '100%'}} src={`http://localhost:5000/${video.thumbnail}`} alt='thumbnail' />
+                            <div className='duration'
+                                style={{
+                                    bottom: 0, right: 0, position: 'absolute', margin: '4px',
+                                    color: '#fff', backgroundColor: 'rgba(17, 17, 17, 0.8)', opacity: 0.8,
+                                    padding: '2px 4px', borderRadius: '2px', letterSpacing: '0.5px', fontSize: '1.2rem',
+                                    fontWeight: '500', lineHeight: '12px'
+                                }}
+                            >
+                                <span>{minutes} : {seconds}</span>
+                            </div>
                         </div>
-                    </div>
-                </a>
+                    </a>
+                </div>
                 <br />
                 <Meta
                     avatar={
@@ -45,6 +54,8 @@ function LandingPage() {
                     title={video.title}
                     description=''
                 />
+                <span>{video.writer.name}</span><br />
+                <span style={{marginLeft: '3rem'}}>{video.views} views</span> - <span>{moment(video.createdAt).format('MMM Do YY')}</span>
             </Col>
         )
     })
