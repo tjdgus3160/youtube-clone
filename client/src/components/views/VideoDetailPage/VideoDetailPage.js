@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Row, Col, List, Avatar } from 'antd';
 import Axios from 'axios';
 import SideVideo from './Sections/SideVideo';
+import Subscribe from './Sections/Subscribe';
 
 function VideoDetailPage(props) {
 
@@ -32,7 +33,7 @@ function VideoDetailPage(props) {
                             src={`http://localhost:5000/${videoDetail.filePath}`}
                             controls 
                         />
-                        <List.Item actions >
+                        <List.Item actions={[<Subscribe userTo={videoDetail.writer._id} useFrom={localStorage.getItem('userId')}/>]} >
                             <List.Item.Meta
                                 avatar={<Avatar src={videoDetail.writer.image} />}
                                 title={videoDetail.writer.name}
